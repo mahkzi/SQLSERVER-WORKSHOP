@@ -1,11 +1,11 @@
-# 📦 Sistema de Gestión de Inventario - Checkpoint SQL
+#  Sistema de Gestión de Inventario - Checkpoint SQL
 
-## 📌 Descripción del Proyecto
+##  Descripción del Proyecto
 Este proyecto establece la base técnica para un sistema de **Control de Inventario**. El objetivo principal es estructurar un modelo de datos relacional que permita registrar productos, clasificarlos en categorías y realizar un seguimiento de los movimientos de stock (entradas y salidas) a lo largo del tiempo. 
 
 Este repositorio sirve como entregable para el "Checkpoint de estructura base", demostrando el dominio en la creación de objetos de base de datos y la ejecución de consultas básicas utilizando **SQL Server 2025**.
 
-## 📂 Estructura de Archivos
+##  Estructura de Archivos
 El proyecto está organizado de la siguiente manera para asegurar una lectura limpia y profesional:
 
 ```text
@@ -16,7 +16,7 @@ El proyecto está organizado de la siguiente manera para asegurar una lectura li
     └── 📄 02_consultas_iniciales.sql   <- DQL: Consultas de validación, filtrado y pruebas lógicas
 ```
 
-## 🛠️ Detalles de Implementación Técnica
+##  Detalles de Implementación Técnica
 Para satisfacer los criterios de aceptación, el modelo de datos implementa lo siguiente:
 * **Tablas Relacionadas (3):** `Categorias`, `Productos`, y `MovimientosStock`.
 * **Tipos de Datos:** 
@@ -27,7 +27,7 @@ Para satisfacer los criterios de aceptación, el modelo de datos implementa lo s
 * **Restricciones:** Uso de `PRIMARY KEY` en todas las tablas y columnas obligatorias definidas como `NOT NULL`.
 * **Manejo de Nulos:** Se incluyeron campos opcionales (ej. notas u observaciones) para poder testear condiciones `IS NULL` / `IS NOT NULL`.
 
-## 🚀 Pasos para Ejecutar los Scripts
+##  Pasos para Ejecutar los Scripts
 
 Para replicar este entorno en tu servidor local, sigue estos pasos:
 
@@ -48,6 +48,3 @@ Para replicar este entorno en tu servidor local, sigue estos pasos:
      * Filtros específicos de control de datos faltantes (`IS NULL` / `IS NOT NULL`).
 
 ---
-**Autor:** [Tu Nombre/Apellido]
-**Curso/Módulo:** [Nombre de tu curso]
-**Fecha:** [Fecha de entrega]
