@@ -1,50 +1,69 @@
-#  Sistema de Gestión de Inventario - Checkpoint SQL
+# Sistema de Gestión de Tienda - Checkpoint SQL
 
-##  Descripción del Proyecto
-Este proyecto establece la base técnica para un sistema de **Control de Inventario**. El objetivo principal es estructurar un modelo de datos relacional que permita registrar productos, clasificarlos en categorías y realizar un seguimiento de los movimientos de stock (entradas y salidas) a lo largo del tiempo. 
+## Descripción del Proyecto
 
-Este repositorio sirve como entregable para el "Checkpoint de estructura base", demostrando el dominio en la creación de objetos de base de datos y la ejecución de consultas básicas utilizando **SQL Server 2025**.
+Este proyecto establece la base técnica para un sistema de **gestión de tienda**. El objetivo es estructurar un modelo de datos relacional que permita registrar clientes, organizar productos por categoría y llevar el control de los pedidos realizados.
 
-##  Estructura de Archivos
-El proyecto está organizado de la siguiente manera para asegurar una lectura limpia y profesional:
+Este repositorio es el entregable del "Checkpoint de estructura base", y demuestra la creación de objetos de base de datos y la ejecución de consultas básicas en **SQL Server**.
 
-```text
-📁 raiz_del_proyecto/
-├── 📄 README.md                        <- Documentación principal (este archivo)
-└── 📁 scripts/
-    ├── 📄 01_tablas_base.sql           <- DDL y DML: Creación de BD, tablas e inserción de datos (mín. 5 registros)
-    └── 📄 02_consultas_iniciales.sql   <- DQL: Consultas de validación, filtrado y pruebas lógicas
+## Estructura de Archivos
+
+```
+raiz_del_proyecto/
+├── README.md                        <- Documentación principal (este archivo)
+└── scripts/
+    ├── 01_tablas_base.sql           <- DDL y DML: creación de BD, tablas e inserción de datos
+    └── 02_consultas_iniciales.sql   <- DQL: consultas de validación, filtrado y pruebas lógicas
 ```
 
-##  Detalles de Implementación Técnica
-Para satisfacer los criterios de aceptación, el modelo de datos implementa lo siguiente:
-* **Tablas Relacionadas (3):** `Categorias`, `Productos`, y `MovimientosStock`.
-* **Tipos de Datos:** 
-  * `INT` (Ej: IDs y cantidades)
-  * `VARCHAR` / `NVARCHAR` (Ej: Nombres y descripciones)
-  * `DECIMAL` (Ej: Precio de los productos)
-  * `DATE` / `DATETIME` (Ej: Fecha de registro o movimiento)
-* **Restricciones:** Uso de `PRIMARY KEY` en todas las tablas y columnas obligatorias definidas como `NOT NULL`.
-* **Manejo de Nulos:** Se incluyeron campos opcionales (ej. notas u observaciones) para poder testear condiciones `IS NULL` / `IS NOT NULL`.
+## Detalles de Implementación Técnica
 
-##  Pasos para Ejecutar los Scripts
+**Base de datos:** `TiendaDB`
 
-Para replicar este entorno en tu servidor local, sigue estos pasos:
+**Tablas (4):**
 
-1. **Abrir el Gestor de Base de Datos:**
-   Abre SQL Server Management Studio (SSMS) o Azure Data Studio y conéctate a tu instancia de SQL Server 2025.
+| Tabla | Descripción | Clave primaria |
+|---|---|---|
+| `clientes` | Datos de las personas que compran | `clienteID` |
+| `categorias` | Clasificación de los productos | `categoriaID` |
+| `productos` | Catálogo, vinculado a una categoría | `productoID` |
+| `pedidos` | Compras, vinculadas a cliente y producto | `pedidoID` |
 
-2. **Paso 1: Ejecutar la Estructura Base**
-   * Ve a `Archivo > Abrir > Archivo...` y selecciona el script `scripts/01_tablas_base.sql`.
-   * Ejecuta el script completo (F5).
-   * *¿Qué hace?* Este script creará la base de datos `GestionInventarioDB`, construirá las 3 tablas con sus respectivas restricciones, y poblará cada tabla con al menos 5 registros de prueba.
+**Relaciones:**
 
-3. **Paso 2: Ejecutar las Consultas de Validación**
-   * Abre el segundo archivo: `scripts/02_consultas_iniciales.sql`.
-   * Ejecuta el script.
-   * *¿Qué hace?* Este script contiene las pruebas solicitadas en el checkpoint:
-     * `SELECT *` para auditar la carga inicial de las 3 tablas.
-     * Consultas con filtros lógicos (`AND`, `OR`) y comparaciones relacionales (`>`, `<`, `<>`).
-     * Filtros específicos de control de datos faltantes (`IS NULL` / `IS NOT NULL`).
+- `productos.categoriaID` → `categorias.categoriaID`
+- `pedidos.clienteID` → `clientes.clienteID`
+- `pedidos.productoID` → `productos.productoID`
 
----
+Todas las claves foráneas usan `ON DELETE CASCADE`.
+
+**Tipos de datos utilizados:**
+
+- `INT` — identificadores y cantidades
+- `VARCHAR` / `NVARCHAR` — nombres, apellidos, descripciones y correos
+- `DECIMAL(10,2)` — precio de los productos
+- `DATETIME2` — fecha del pedido
+
+**Restricciones:**
+
+- `PRIMARY KEY` con `IDENTITY(1,1)` en las cuatro tablas
+- `FOREIGN KEY` en `productos` y `pedidos`
+- `UNIQUE` sobre `clientes.correo`
+- `CHECK` sobre `productos.precio` (debe ser mayor a 0) y `pedidos.cantidad`
+- `NOT NULL` en todas las columnas obligatorias
+
+**Manejo de nulos:** las columnas `clientes.telefono` y `productos.descripcion` admiten `NULL`, y los datos de prueba incluyen registros sin cargar en ambas, para poder validar `IS NULL` e `IS NOT NULL` con resultados reales.
+
+**Datos de prueba cargados:** 6 categorías, 7 clientes, 13 productos y 10 pedidos. Supera el mínimo de 5 registros por tabla.
+
+## Pasos para Ejecutar los Scripts
+
+1. **Abrir el gestor de base de datos.** SQL Server Management Studio (SSMS) o Azure Data Studio, conectado a tu instancia local.
+
+2. **Ejecutar la estructura base.** Abrí `scripts/01_tablas_base.sql` y ejecutalo completo (F5). Crea la base `TiendaDB`, las cuatro tablas con sus restricciones y carga los datos de prueba. El script es re-ejecutable: elimina las tablas existentes antes de crearlas, en el orden correcto según las dependencias.
+
+3. **Ejecutar las consultas de validación.** Abrí `scripts/02_consultas_iniciales.sql` y ejecutalo. Contiene:
+   - `SELECT *` sobre las cuatro tablas para auditar la carga inicial
+   - filtros con operadores lógicos (`AND`, `OR`)
+   - comparaciones relacionales (`>`, `<`, `<>`)
+   - control de datos faltantes (`IS NULL`, `IS NOT NULL`)
